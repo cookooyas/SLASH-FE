@@ -1,0 +1,64 @@
+.right {
+    text-align: right;
+}
+
+.cqRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+
+.cqMini {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.cqNumber {
+    font-size: xx-large;
+}
+
+.cmBox {
+    width: 100%;
+    display: flex;
+}
+
+.cqColumn {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+
+.cqTopRightBox {
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.cqBox {
+    text-align: left;
+
+    width: 100%;
+    font-weight: 600;
+    display: flex;
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    background-color: white;
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
+    padding: 15px 20px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+img {
+    margin-right: 10px;
+}
