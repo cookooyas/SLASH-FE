@@ -16,7 +16,7 @@ const ContractManagerMain = () => {
         isNavOpen={isNavOpen}
         toggleNav={toggleNav}
         effectClass={effectClass}
-        setEffectClass={setEffectClass}
+        setEffectClass={setEffectClass} //??
       />
 
       <ContractManagerMainContent

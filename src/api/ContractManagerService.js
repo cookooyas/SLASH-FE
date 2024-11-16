@@ -1,21 +1,10 @@
-import axios from "axios";
-import apiClient from "./Interceptor";
-
-axios.defaults.baseURL = "http://localhost:8080";
-apiClient.defaults.baseURL = "http://localhost:8080";
+import axios from "./Interceptor";
 
 export const CreateContract = async (requestContractDTO) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.post(
       "/contract-manager/contract",
-      requestContractDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestContractDTO
     );
 
     if (response.data.success) {
@@ -35,16 +24,9 @@ export const CreateContract = async (requestContractDTO) => {
 
 export const CreateServiceDetail = async (requestContractDTO) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.post(
       "/contract-manager/evaluation-item",
-      requestContractDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestContractDTO
     );
 
     if (response.data.success) {
@@ -61,21 +43,14 @@ export const CreateServiceDetail = async (requestContractDTO) => {
 
 export const fetchStatisticsStatus = async (contractId, selectedDate) => {
   try {
-    const token = localStorage.getItem("accessToken");
     const params = { contractId: contractId, date: selectedDate };
-    console.log("전송 값:", params);
-
     // axios 요청 수정
     const response = await axios.get(
       `/contract-manager/statistics/status/${contractId}?date=${selectedDate}`,
       {
         params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       }
     );
-    console.log("서버 응답:", JSON.stringify(response.data, null, 2));
 
     return response.data; // 데이터를 반환
   } catch (error) {
@@ -87,14 +62,7 @@ export const fetchStatisticsStatus = async (contractId, selectedDate) => {
 
 export const saveMeasuring = async (dto) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
-    console.log(dto);
-    const response = await axios.post("/contract-manager/statistics", dto, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.post("/contract-manager/statistics", dto);
 
     // Check if response.data.success exists and return it
     if (response.data && response.data.success) {
@@ -110,17 +78,9 @@ export const saveMeasuring = async (dto) => {
 
 export const saveServiceMeasuring = async (dto) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
-    console.log(dto);
     const response = await axios.post(
       "/contract-manager/service-statistic",
-      dto,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      dto
     );
 
     // Check if response.data.success exists and return it
@@ -137,14 +97,7 @@ export const saveServiceMeasuring = async (dto) => {
 
 export const saveIncidentMeasuring = async (dto) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
-    console.log(dto);
-    const response = await axios.post("/common/incident-statistics", dto, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.post("/common/incident-statistics", dto);
 
     // Check if response.data.success exists and return it
     if (response.data && response.data.success) {
@@ -160,17 +113,9 @@ export const saveIncidentMeasuring = async (dto) => {
 
 export const fetchAllContractInfo = async () => {
   try {
-    const token = localStorage.getItem("accessToken"); // 토큰 가져오기
-
-    const response = await axios.get("/contract-manager/all-contract", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await axios.get("/contract-manager/all-contract");
 
     if (response.data.success) {
-      console.log(response.data.data);
-
       return response.data.data;
     } else {
       return [];
@@ -182,15 +127,8 @@ export const fetchAllContractInfo = async () => {
 
 export const fetchModifyIsPossible = async (contractId) => {
   try {
-    const token = localStorage.getItem("accessToken"); // 토큰 가져오기
-
     const response = await axios.get(
-      `/contract-manager/modifiable/${contractId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/contract-manager/modifiable/${contractId}`
     );
 
     if (response.data.success) {
@@ -207,16 +145,9 @@ export const fetchModifyIsPossible = async (contractId) => {
 
 export const createTotalTarget = async (contractId, requestTotalTargetDTO) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.post(
       `/contract-manager/total-target/${contractId}`,
-      requestTotalTargetDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestTotalTargetDTO
     );
 
     if (response.data.success) {
@@ -234,16 +165,9 @@ export const createTotalTarget = async (contractId, requestTotalTargetDTO) => {
 
 export const updateTotalTarget = async (contractId, requestTotalTargetDTO) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.put(
       `/contract-manager/total-target/${contractId}`,
-      requestTotalTargetDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestTotalTargetDTO
     );
 
     if (response.data.success) {
@@ -264,16 +188,9 @@ export const createEvaluationItem = async (
   requestEvaluationDTO
 ) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.post(
       `/contract-manager/total-target/${evaluationItemId}`,
-      requestEvaluationDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestEvaluationDTO
     );
 
     if (response.data.success) {
@@ -294,16 +211,9 @@ export const updateEvaluationItem = async (
   requestEvaluationDTO
 ) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.put(
       `/contract-manager/evaluation-item/${evaluationItemId}`,
-      requestEvaluationDTO,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      requestEvaluationDTO
     );
 
     if (response.data.success) {
@@ -321,15 +231,8 @@ export const updateEvaluationItem = async (
 
 export const deleteEvaluationItem = async (evaluationItemId) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
     const response = await axios.delete(
-      `/contract-manager/evaluation-item/${evaluationItemId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/contract-manager/evaluation-item/${evaluationItemId}`
     );
 
     if (response.data.success) {
@@ -347,16 +250,9 @@ export const deleteEvaluationItem = async (evaluationItemId) => {
 
 //통계 지표 수정 api 요청 함수
 export const fetchEvaluationEquipment = async (evaluationItemId, date) => {
-  const token = localStorage.getItem("accessToken"); // 토큰을 로컬스토리지에서 가져오기
   try {
     const response = await axios.get(
-      `/contract-manager/statistics/${evaluationItemId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { date: date },
-      }
+      `/contract-manager/statistics/${evaluationItemId}`
     );
     return response.data;
   } catch (error) {
@@ -366,16 +262,9 @@ export const fetchEvaluationEquipment = async (evaluationItemId, date) => {
 };
 
 export const fetchEditStatistics = async (evaluationItemId, editData) => {
-  const token = localStorage.getItem("accessToken");
   try {
     const response = await axios.patch(
-      `/contract-manager/statistics/${evaluationItemId}`,
-      editData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `/contract-manager/statistics/${evaluationItemId}`
     );
     return response.data;
   } catch (error) {
@@ -386,14 +275,9 @@ export const fetchEditStatistics = async (evaluationItemId, editData) => {
 
 export const deleteStatistics = async (evaluationItemId, calculateTime) => {
   try {
-    const token = localStorage.getItem("accessToken");
-
-    const response = await apiClient.delete(
+    const response = await axios.delete(
       `/contract-manager/statistics/${evaluationItemId}`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         params: {
           date: calculateTime, // LocalDate 형식의 날짜를 YYYY-MM-DD 형태로 전달
         },

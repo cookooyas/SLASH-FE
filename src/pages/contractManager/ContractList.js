@@ -7,21 +7,17 @@ const ContractList = () => {
   const [isNavOpen, setNavOpen] = useState(true);
   const [effectClass, setEffectClass] = useState(1);
 
-  const toggleNav = () => {
-    setNavOpen(!isNavOpen);
-  };
-
   return (
     <div>
       <ContractManagerSidebar
         isNavOpen={isNavOpen}
-        toggleNav={toggleNav}
+        toggleNav={() => setNavOpen((prev) => !prev)}
         effectClass={effectClass}
         setEffectClass={setEffectClass}
       />
       <ContractListInfo
         isNavOpen={isNavOpen}
-        toggleNav={toggleNav}
+        toggleNav={() => setNavOpen((prev) => !prev)}
         effectClass={effectClass}
       />
     </div>

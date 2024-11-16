@@ -28,24 +28,23 @@ const ContractManagerMain = () => {
       let firstContractId = null;
 
       // 경로에 따라 처리
-      if (location.pathname === "/contractManager/contractDetail") {
-        // /contractManager/contractDetail 경로에서는 state에서 contractId를 사용
+      // /contractManager/contractDetail 경로에서는 state에서 contractId를 사용
+      if (!!location.state) {
         firstContractId = location.state?.contractId;
-      } else if (location.pathname === "/contractManager") {
-        // /contractManager 경로에서는 state가 없을 때 첫 번째 계약 선택
-        firstContractId = location.state?.contractId || response[0]?.contractId;
-      }
+        setContractId(firstContractId);
+        setSelectContractId(firstContractId);
 
-      setContractId(firstContractId);
-      setSelectContractId(firstContractId);
-
-      if (firstContractId) {
-        const initialContractInfo = await fetchContractInfo(firstContractId);
-        setContractInfo(initialContractInfo);
-        setEvaluationItems(initialContractInfo?.evaluationItems || []);
-        setContractName(initialContractInfo?.contractName || "");
+        if (firstContractId) {
+          const initialContractInfo = await fetchContractInfo(firstContractId);
+          setContractInfo(initialContractInfo);
+          setEvaluationItems(initialContractInfo?.evaluationItems || []);
+          setContractName(initialContractInfo?.contractName || "");
+        } else {
+          console.warn("No contract ID found or state is empty.");
+        }
       } else {
-        console.warn("No contract ID found or state is empty.");
+        alert("잘못된 접근입니다.");
+        navigate(-1);
       }
     };
     loadData();
@@ -118,9 +117,7 @@ const ContractManagerMain = () => {
               </div>
 
               <div className="table mainTotalGrade">
-                <GradeHorizonTable
-                  initialData={contractInfo?.totalTargets || []}
-                />
+                <GradeHorizonTable initialData={contractInfo.totalTargets} />
               </div>
             </div>
 
@@ -137,7 +134,7 @@ const ContractManagerMain = () => {
               </div>
               <div className="categoryTitle">
                 <EvaluationItemListTable
-                  initialData={evaluationItems || []}
+                  data={evaluationItems}
                   contractName={contractName}
                   contractId={contractId}
                 />

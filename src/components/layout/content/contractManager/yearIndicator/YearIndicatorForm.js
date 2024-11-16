@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import YearIndicatorsChart from "../../../../feature/chart/yearIndicatorChart/YearIndicatorChart";
 import YearIndicatorTable from "./YearIndicatorTable";
 import YearHeader from "../../../../common/header/YearHeader";
 
 const YearIndicatorForm = () => {
   const [selectedContractId, setSelectedContractId] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date().getFullYear());
 
   const handleContractSelection = (contractId, date) => {
     setSelectedContractId(contractId);

@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./EvaluationItemList.css";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
-const EvaluationItemListTable = ({ initialData, contractName, contractId }) => {
-  const [data, setData] = useState(initialData || []);
-
+const EvaluationItemListTable = ({ data, contractName, contractId }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("EvaluationItemListTable 데이터: ", initialData); // data 값 확인
-    setData(initialData);
-  }, [initialData]);
 
   const handleEvaluationItemDetail = (evaluationItemId) => {
     console.log(evaluationItemId);
@@ -28,7 +21,7 @@ const EvaluationItemListTable = ({ initialData, contractName, contractId }) => {
         <p className="periodP headerP">측정 주기</p>
         <p className="buttonP"></p>
       </div>
-      {data.length === 0 ? (
+      {data?.length === 0 ? (
         <div className="noData">평가 항목을 등록하세요</div>
       ) : (
         data.map((item, index) => (

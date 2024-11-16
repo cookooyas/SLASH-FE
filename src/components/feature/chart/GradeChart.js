@@ -5,13 +5,11 @@ import "./GradeChart.css";
 import { MdHeight } from "react-icons/md";
 
 const GradeChart = ({ indicatorList }) => {
-  const initialData = indicatorList || [];
-
   // x축 카테고리와 y축 데이터 준비
-  const xCategory = initialData.map((item) => item.category);
+  const xCategory = indicatorList.map((item) => item.category);
 
   // 각 카테고리에 따른 색상 설정
-  const data = initialData.map((item) => {
+  const data = indicatorList.map((item) => {
     let color;
     switch (item.category) {
       case "서비스 가동률":
@@ -113,7 +111,7 @@ const GradeChart = ({ indicatorList }) => {
 
   return (
     <>
-      {initialData.length === 0 ? (
+      {indicatorList.length === 0 ? (
         <div className="noChartMessage">
           <p>산출 결과가 없습니다</p>
         </div>

@@ -1,66 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { FaAsterisk } from "react-icons/fa6";
+import { FaAsterisk, FaRegCalendar } from "react-icons/fa6";
 import "./ContractHeader.css";
-import { fetchAllContractName } from "../../../api/UserService";
+import DatePicker from "react-datepicker";
+import { format } from "date-fns";
 
-const ContractHeaderV1 = ({ onContractSelect }) => {
-  const [selectedAgreement, setSelectedAgreement] = useState("");
-  const [selectedAgreementId, setSelectedAgreementId] = useState(null);
-
-  const [contracts, setContracts] = useState([]);
-
-  // 초기 날짜를 설정하는 로직
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const storedDate = localStorage.getItem("selectedDate");
-    if (storedDate) {
-      return storedDate; // 로컬 스토리지에서 날짜가 있으면 그것을 사용
-    } else {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const day = String(now.getDate()).padStart(2, "0");
-      return `${year}-${month}`; // 오늘 날짜를 기본값으로 설정
-    }
-  });
-
+const ContractHeaderV1 = ({
+  agreements,
+  selectedAgreement,
+  setSelectedAgreement,
+  selectedDate,
+  setSelectedDate,
+  dateFormat,
+}) => {
   const handleAgreementChange = (e) => {
-    const id = e.target.value;
-    setSelectedAgreementId(id);
-    onContractSelect(id, selectedDate);
+    const agreementName = e.target.value;
+    setSelectedAgreement(
+      agreements.filter((agreement) => agreement.contractName === agreementName)
+    );
   };
 
-  const handleDateChange = (e) => {
-    const date = e.target.value;
-    setSelectedDate(date);
-    localStorage.setItem("selectedDate", date);
-    onContractSelect(selectedAgreementId, date);
+  const handleDateChange = (date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    setSelectedDate(formattedDate);
   };
 
-  // contracts를 불러오고 나서 초기 선택값 설정
-  useEffect(() => {
-    const fetchContracts = async () => {
-      try {
-        const data = await fetchAllContractName();
-        if (data && Array.isArray(data)) {
-          setContracts(data);
-          if (data.length > 0) {
-            setSelectedAgreement(data[0].contractName);
-            setSelectedAgreementId(data[0].contractId);
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch contracts: ", error);
-      }
-    };
-    fetchContracts();
-  }, []);
-
-  // 선택된 협약서 ID와 날짜가 변경될 때마다 onContractSelect 호출
-  useEffect(() => {
-    if (selectedAgreementId && selectedDate) {
-      onContractSelect(selectedAgreementId, selectedDate);
+  const inputDateFormatter = () => {
+    switch (dateFormat) {
+      case "year":
+        return "yyyy년";
+      case "month":
+        return `yyyy년 MM월`;
+      default:
+        return `yyyy년 MM월 dd일`;
     }
-  }, [selectedAgreementId, selectedDate, onContractSelect]);
+  };
 
   return (
     <div className="topIndex">
@@ -68,21 +41,48 @@ const ContractHeaderV1 = ({ onContractSelect }) => {
       협약서
       <select
         className="criteria2"
-        value={selectedAgreementId || ""}
+        value={selectedAgreement || ""}
         onChange={handleAgreementChange}
       >
-        {contracts.map((contract) => (
-          <option key={contract.contractId} value={contract.contractId}>
-            {contract.contractName}
+        {agreements.map((agreement) => (
+          <option key={agreement.contractId} value={agreement.contractName}>
+            {agreement.contractName}
           </option>
         ))}
       </select>
-      <input
-        type="month"
-        className="criteria2"
-        value={selectedDate}
-        onChange={handleDateChange}
-      />
+      <div className="datePickerContainer">
+        {selectedDate && setSelectedDate && (
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            showYearPicker={dateFormat === "year"}
+            showMonthYearPicker={dateFormat === "month"}
+            dateFormat={inputDateFormatter()}
+            customInput={
+              <div className="datePickerContainer">
+                <input
+                  type="text"
+                  className="criteria2"
+                  value={
+                    selectedDate
+                      ? format(selectedDate, inputDateFormatter())
+                      : ""
+                  }
+                  readOnly
+                />
+                <FaRegCalendar className="calendarIcon" />
+              </div>
+            }
+            placeholderText={
+              dateFormat === "year"
+                ? "연도를 선택하세요"
+                : dateFormat === "month"
+                  ? "연-월을 선택하세요"
+                  : "연-월-일을 선택하세요"
+            }
+          />
+        )}
+      </div>
     </div>
   );
 };

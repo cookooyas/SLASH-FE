@@ -11,7 +11,6 @@ const ContractListForm = () => {
   useEffect(() => {
     const loadData = async () => {
       const response = await fetchAllContractInfo();
-      console.log(response);
       setFormData(response);
     };
     loadData();

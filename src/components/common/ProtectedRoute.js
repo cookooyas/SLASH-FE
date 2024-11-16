@@ -1,30 +1,32 @@
-import { jwtDecode } from "jwt-decode";
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect, useState } from "react";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const token = localStorage.getItem("accessToken");
+  const { isAuthenticated, user, logout } = useAuth();
+  const [redirectPath, setRedirectPath] = useState(null);
 
-  if (!token) {
-    alert("로그인이 필요합니다.");
-    return <Navigate to="/" replace />;
-  }
-
-  try {
-    const decodedToken = jwtDecode(token);
-    const userRole = decodedToken.auth;
-    const hasAccess = allowedRoles.includes(userRole);
-    if (!hasAccess) {
-      alert("접근 권한이 없습니다.");
-      return <Navigate to="/" replace />;
+  useEffect(() => {
+    if (!isAuthenticated) {
+      alert("로그인이 필요합니다.");
+      logout();
+      setRedirectPath("/"); // 리다이렉트 경로 설정
+    } else {
+      const hasAccess = allowedRoles.includes(user.auth);
+      if (!hasAccess) {
+        alert("접근 권한이 없습니다.");
+        setRedirectPath("/"); // 리다이렉트 경로 설정
+      }
     }
+  }, [isAuthenticated, user, allowedRoles, logout]);
 
-    return children;
-  } catch (error) {
-    console.error("토큰 디코딩 오류:", error);
-    alert("인증 정보가 잘못되었습니다. 다시 로그인해 주세요.");
-    localStorage.removeItem("accessToken");
-    return <Navigate to="/" replace />;
+  // 리다이렉트 조건 확인
+  if (redirectPath) {
+    return <Navigate to={redirectPath} replace />;
   }
+
+  // 모든 조건을 통과한 경우 자식 컴포넌트를 렌더링
+  return children;
 };
 
 export default ProtectedRoute;
